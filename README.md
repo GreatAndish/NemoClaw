@@ -27,6 +27,46 @@ It installs the [NVIDIA OpenShell](https://github.com/NVIDIA/OpenShell) runtime,
 
 NemoClaw adds guided onboarding, a hardened blueprint, state management, OpenShell-managed channel messaging, routed inference, and layered protection on top of the [NVIDIA OpenShell](https://github.com/NVIDIA/OpenShell) runtime. For the full feature list, refer to [Overview](https://docs.nvidia.com/nemoclaw/latest/about/overview.html). For the system diagram, component model, and blueprint lifecycle, refer to [How It Works](https://docs.nvidia.com/nemoclaw/latest/about/how-it-works.html) and [Architecture](https://docs.nvidia.com/nemoclaw/latest/reference/architecture.html).
 
+## At a Glance
+
+NemoClaw brings three components together into one command-driven workflow:
+
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│  Host                                                                │
+│                                                                      │
+│  nemoclaw CLI ──► OpenShell Gateway ──► Sandbox                      │
+│                         │                  │                         │
+│                         │                  └─► OpenClaw (AI agent)   │
+│                         │                                            │
+│                         └──► Inference Provider                      │
+│                              (NVIDIA Endpoints, OpenAI, Ollama, ...) │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+| Component | Role |
+|-----------|------|
+| `nemoclaw` CLI | Orchestrates onboarding, sandbox lifecycle, and policy from the host |
+| OpenShell Gateway | Sandboxes the agent, routes inference calls, and enforces network egress policy |
+| OpenClaw | The AI assistant running inside the hardened, isolated sandbox |
+
+### Four commands to go from zero to a running agent
+
+```bash
+# 1. Install NemoClaw and run the guided onboard wizard
+#    (the wizard prompts for a sandbox name, e.g. "my-assistant")
+curl -fsSL https://www.nvidia.com/nemoclaw.sh | bash
+
+# 2. Connect to the sandbox shell (replace "my-assistant" with your sandbox name)
+nemoclaw my-assistant connect
+
+# 3. Open the OpenClaw terminal UI
+openclaw tui
+
+# 4. Or send a single message from the command line
+openclaw agent --agent main --local -m "hello" --session-id test
+```
+
 ## Getting Started
 
 Follow these steps to install NemoClaw and run your first sandboxed OpenClaw agent.
